@@ -4,11 +4,12 @@ import (
 	"errors"
 )
 
-type Handler func() error
+type Handler func(*StateMachine) error
 
 type TransitionEntry struct {
 	ToState int
 	Handler Handler
+	Args    interface{}
 }
 
 type StateMachine struct {
@@ -66,7 +67,7 @@ func (sm *StateMachine) TransitionTo(to_state int) error {
 	}
 
 	//call the handler
-	err := handler()
+	err := handler(sm)
 
 	if err != nil {
 		return err
